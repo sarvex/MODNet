@@ -41,8 +41,8 @@ def matting(video, result, alpha_matte=False, fps=30):
     else:
         rw = 512
         rh = int(h / w * 512)
-    rh = rh - rh % 32
-    rw = rw - rw % 32
+    rh -= rh % 32
+    rw -= rw % 32
 
     # video writer
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
@@ -99,7 +99,7 @@ if __name__ == '__main__':
     modnet = MODNet(backbone_pretrained=False)
     modnet = nn.DataParallel(modnet)
 
-    GPU = True if torch.cuda.device_count() > 0 else False
+    GPU = torch.cuda.device_count() > 0
     if GPU:
         print('Use GPU...')
         modnet = modnet.cuda()
@@ -110,5 +110,5 @@ if __name__ == '__main__':
     modnet.eval()
 
     result = os.path.splitext(args.video)[0] + '_{0}.mp4'.format(args.result_type)
-    alpha_matte = True if args.result_type == 'matte' else False
+    alpha_matte = args.result_type == 'matte'
     matting(args.video, result, alpha_matte, args.fps)

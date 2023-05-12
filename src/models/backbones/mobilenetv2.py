@@ -77,10 +77,7 @@ class InvertedResidual(nn.Module):
 			)
 
 	def forward(self, x):
-		if self.use_res_connect:
-			return x + self.conv(x)
-		else:
-			return self.conv(x)
+		return x + self.conv(x) if self.use_res_connect else self.conv(x)
 
 
 #------------------------------------------------------------------------------

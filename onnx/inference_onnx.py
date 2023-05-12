@@ -46,7 +46,7 @@ if __name__ == '__main__':
             if im_w >= im_h:
                 im_rh = ref_size
                 im_rw = int(im_w / im_h * ref_size)
-            elif im_w < im_h:
+            else:
                 im_rw = ref_size
                 im_rh = int(im_h / im_w * ref_size)
         else:

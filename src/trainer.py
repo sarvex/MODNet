@@ -52,14 +52,14 @@ class GaussianBlurLayer(nn.Module):
             torch.Tensor: Blurred version of the input 
         """
 
-        if not len(list(x.shape)) == 4:
+        if len(list(x.shape)) != 4:
             print('\'GaussianBlurLayer\' requires a 4D tensor as input\n')
             exit()
-        elif not x.shape[1] == self.channels:
+        elif x.shape[1] != self.channels:
             print('In \'GaussianBlurLayer\', the required channel ({0}) is'
                   'not the same as input ({1})\n'.format(self.channels, x.shape[1]))
             exit()
-            
+
         return self.op(x)
     
     def _init_kernel(self):

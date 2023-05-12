@@ -192,9 +192,7 @@ class FusionBranch(nn.Module):
         f2x = self.conv_f2x(torch.cat((lr2x, hr2x), dim=1))
         f = F.interpolate(f2x, scale_factor=2, mode='bilinear', align_corners=False)
         f = self.conv_f(torch.cat((f, img), dim=1))
-        pred_matte = torch.sigmoid(f)
-
-        return pred_matte
+        return torch.sigmoid(f)
 
 
 #------------------------------------------------------------------------------
@@ -222,7 +220,7 @@ class MODNet(nn.Module):
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 self._init_conv(m)
-            elif isinstance(m, nn.BatchNorm2d) or isinstance(m, nn.InstanceNorm2d):
+            elif isinstance(m, (nn.BatchNorm2d, nn.InstanceNorm2d)):
                 self._init_norm(m)
 
         if self.backbone_pretrained:

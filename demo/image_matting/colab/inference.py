@@ -78,13 +78,13 @@ if __name__ == '__main__':
             if im_w >= im_h:
                 im_rh = ref_size
                 im_rw = int(im_w / im_h * ref_size)
-            elif im_w < im_h:
+            else:
                 im_rw = ref_size
                 im_rh = int(im_h / im_w * ref_size)
         else:
             im_rh = im_h
             im_rw = im_w
-        
+
         im_rw = im_rw - im_rw % 32
         im_rh = im_rh - im_rh % 32
         im = F.interpolate(im, size=(im_rh, im_rw), mode='area')

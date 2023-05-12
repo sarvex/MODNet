@@ -21,7 +21,7 @@ pretrained_ckpt = './pretrained/modnet_webcam_portrait_matting.ckpt'
 modnet = MODNet(backbone_pretrained=False)
 modnet = nn.DataParallel(modnet)
 
-GPU = True if torch.cuda.device_count() > 0 else False
+GPU = torch.cuda.device_count() > 0
 if GPU:
     print('Use GPU...')
     modnet = modnet.cuda()
@@ -50,7 +50,7 @@ while(True):
     frame_tensor = frame_tensor[None, :, :, :]
     if GPU:
         frame_tensor = frame_tensor.cuda()
-    
+
     with torch.no_grad():
         _, _, matte_tensor = modnet(frame_tensor, True)
 

@@ -189,9 +189,7 @@ class FusionBranch(nn.Module):
         f2x = self.conv_f2x(torch.cat((lr2x, hr2x), dim=1))
         f = F.interpolate(f2x, scale_factor=2.0, mode='bilinear', align_corners=False)
         f = self.conv_f(torch.cat((f, img), dim=1))
-        pred_matte = torch.sigmoid(f)
-
-        return pred_matte
+        return torch.sigmoid(f)
 
 
 #------------------------------------------------------------------------------
@@ -219,7 +217,7 @@ class MODNet(nn.Module):
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 self._init_conv(m)
-            elif isinstance(m, nn.BatchNorm2d) or isinstance(m, nn.InstanceNorm2d):
+            elif isinstance(m, (nn.BatchNorm2d, nn.InstanceNorm2d)):
                 self._init_norm(m)
 
         if self.backbone_pretrained:
@@ -233,10 +231,8 @@ class MODNet(nn.Module):
         enc4x = lr_out[2]
 
         hr2x = self.hr_branch(img, enc2x, enc4x, lr8x)
-        
-        pred_matte = self.f_branch(img, lr8x, hr2x)
 
-        return pred_matte
+        return self.f_branch(img, lr8x, hr2x)
     
     def freeze_norm(self):
         norm_types = [nn.BatchNorm2d, nn.InstanceNorm2d]
